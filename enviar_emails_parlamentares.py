@@ -7,10 +7,16 @@ from email.mime.multipart import MIMEMultipart
 
 st.title("Envio de Mensagens a Parlamentares")
 
+# Instrução em português
+st.markdown("📄 **Arraste e solte sua planilha de parlamentares aqui** (formato `.csv`, até 200MB)")
+
 # Upload ou leitura local
-uploaded_file = st.file_uploader("Envie a planilha de parlamentares (.csv)", type=["csv"])
+uploaded_file = st.file_uploader("Envie a planilha", type=["csv"])
 if uploaded_file:
-    df = pd.read_csv(uploaded_file, sep=";", encoding="utf-8")
+    try:
+        df = pd.read_csv(uploaded_file, sep=";", encoding="utf-8")
+    except UnicodeDecodeError:
+        df = pd.read_csv(uploaded_file, sep=";", encoding="latin1")
 else:
     st.stop()
 
